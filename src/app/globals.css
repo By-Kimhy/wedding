@@ -1,0 +1,368 @@
+@import "tailwindcss";
+@import "../styles/fonts-zh.css";
+@import "../styles/theme.css";
+
+/*
+ * Tailwind tokens are aliases onto the raw custom properties in theme.css.
+ * They are deliberately named differently (canvas / ink / paper / line) so the
+ * palette in theme.css stays the single place a colour is ever defined.
+ */
+@theme inline {
+  --color-canvas: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-backdrop: var(--color-backdrop);
+  --color-aqua: var(--color-aqua);
+  --color-ink: var(--color-text);
+  --color-muted: var(--color-muted);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-paper: var(--color-white);
+  --color-line: var(--color-border);
+  --color-hairline: var(--color-hairline);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * {
+    min-width: 0;
+  }
+
+  /* A safety net for text that carries no language class of its own. */
+  :root:lang(km) {
+    --font-title: var(--font-kh-title);
+  }
+
+  :root:lang(zh) {
+    --font-title: var(--font-zh-title);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Anchored sections clear the floating controls. */
+    scroll-padding-top: 4.5rem;
+    background-color: var(--color-backdrop);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: clip;
+    color: var(--color-text);
+    background-color: var(--color-backdrop);
+    font-family: var(--font-en);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Stop iOS rubber-banding from revealing a white strip. */
+    overscroll-behavior-y: none;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Fields a guest types into stay in the UI face, whatever the page is set in. */
+  input,
+  textarea,
+  select {
+    font-family: var(--font-ui);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+  }
+
+  /* The invitation never scrolls behind the cover or the lightbox. */
+  body[data-locked="true"],
+  body[data-lightbox="open"] {
+    overflow: hidden;
+    touch-action: none;
+  }
+}
+
+@layer components {
+  /* ---- Language faces ------------------------------------------------- */
+  /*
+   * Each language class sets the running face *and* re-points `--font-title`,
+   * which the `.t-*` classes read. Because custom properties inherit, a
+   * heading picks up the right title face whether the language class is on the
+   * heading itself or on any ancestor.
+   */
+  .font-en {
+    --font-title: var(--font-en-title);
+    font-family: var(--font-en);
+  }
+
+  .font-zh {
+    --font-title: var(--font-zh-title);
+    font-family: var(--font-zh);
+    /* Chinese needs a touch more air between glyphs to feel considered. */
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+  }
+
+  .font-kh {
+    --font-title: var(--font-kh-title);
+    font-family: var(--font-kh);
+    /* Khmer stacks diacritics above and below; give it room. */
+    line-height: 2.15;
+    letter-spacing: 0.01em;
+    word-spacing: 0.08em;
+  }
+
+  /* Controls and anything that must stay plainly legible. */
+  .font-ui {
+    font-family: var(--font-ui);
+  }
+
+  .font-display {
+    font-family: var(--font-title);
+    font-weight: 300;
+  }
+
+  /*
+   * Display faces often default to old-style figures, which turn a "1" into
+   * something close to a capital I. Lining figures keep dates and the
+   * countdown legible whichever face is in play.
+   */
+  .font-display,
+  .t-display,
+  .t-title,
+  .t-heading {
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
+  }
+
+  /* ---- Type scale ----------------------------------------------------- */
+  .t-display {
+    font-family: var(--font-title);
+    font-size: var(--fs-display);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: var(--tracking-display);
+  }
+
+  .t-title {
+    font-family: var(--font-title);
+    font-size: var(--fs-title);
+    font-weight: 300;
+    line-height: 1.18;
+    letter-spacing: 0.04em;
+  }
+
+  .t-heading {
+    font-family: var(--font-title);
+    font-size: var(--fs-heading);
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+  }
+
+  .t-lead {
+    font-size: var(--fs-lead);
+    font-weight: 300;
+    line-height: 1.95;
+    letter-spacing: 0.02em;
+  }
+
+  .t-body {
+    font-size: var(--fs-body);
+    font-weight: 300;
+    line-height: 1.9;
+    letter-spacing: 0.015em;
+  }
+
+  .t-caption {
+    font-size: var(--fs-caption);
+    font-weight: 400;
+    line-height: 1.7;
+    letter-spacing: 0.08em;
+  }
+
+  .t-eyebrow {
+    font-family: var(--font-ui);
+    font-size: var(--fs-eyebrow);
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+  }
+
+  /*
+   * Khmer and Chinese do not have uppercase forms, and the wide Latin tracking
+   * pulls their glyph clusters apart. Soften both wherever a language class is
+   * applied to an eyebrow.
+   */
+  .font-kh.t-eyebrow,
+  .font-zh.t-eyebrow,
+  .font-kh .t-eyebrow,
+  .font-zh .t-eyebrow {
+    text-transform: none;
+    letter-spacing: 0.16em;
+  }
+
+  .font-kh.t-display,
+  .font-kh .t-display,
+  .font-kh.t-title,
+  .font-kh .t-title {
+    line-height: 1.5;
+  }
+
+  /* ---- The invitation column ------------------------------------------ */
+  /*
+   * Everything the guest reads lives inside a phone-width column: full-bleed
+   * on a phone, a centred card on a desktop. `container-type` makes the
+   * cqw-based type scale measure against this column rather than the window,
+   * so the invitation reads identically at both sizes.
+   */
+  .invitation-column {
+    width: 100%;
+    max-width: var(--invitation-max);
+    margin-inline: auto;
+    container-type: inline-size;
+    container-name: invitation;
+  }
+
+  /* ---- Surfaces ------------------------------------------------------- */
+  .paper-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--texture-grain);
+    opacity: 0.24;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- Falling petals -------------------------------------------------- */
+  /*
+   * Two nested animations make the fall read as drifting rather than dropping:
+   * the outer element carries the piece down the screen and sideways, the
+   * inner one flutters and turns it as it goes. Both animate transform and
+   * opacity only, so the whole effect stays on the compositor.
+   */
+  .petal {
+    position: absolute;
+    top: 0;
+    will-change: transform, opacity;
+    animation: petal-fall var(--fall) linear var(--delay) infinite;
+  }
+
+  .petal > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    animation: petal-flutter var(--flutter) ease-in-out var(--delay) infinite;
+  }
+
+  @keyframes petal-fall {
+    0% {
+      transform: translate3d(0, -16svh, 0);
+      opacity: 0;
+    }
+    9% {
+      opacity: var(--peak);
+    }
+    86% {
+      opacity: var(--peak);
+    }
+    100% {
+      transform: translate3d(var(--drift), 112svh, 0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes petal-flutter {
+    0% {
+      transform: translateX(calc(var(--sway) * -1)) rotate(var(--spin-from));
+    }
+    50% {
+      transform: translateX(var(--sway)) rotate(var(--spin-mid));
+    }
+    100% {
+      transform: translateX(calc(var(--sway) * -1)) rotate(var(--spin-to));
+    }
+  }
+
+  /* ---- Decorative marks ----------------------------------------------- */
+  .rule-x {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-border),
+      transparent
+    );
+  }
+
+  .rule-y {
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--color-border),
+      transparent
+    );
+  }
+}
+
+@layer utilities {
+  /* Full viewport height that accounts for mobile browser chrome. */
+  .h-screen-s {
+    height: 100svh;
+  }
+
+  .min-h-screen-s {
+    min-height: 100svh;
+  }
+
+  .text-balance-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Tabular figures keep the countdown from jittering each second. */
+  .tabular {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * Reduced motion: keep the invitation legible and still. Framer Motion reads
+ * the same preference at runtime; this covers CSS-driven movement.
+ * ---------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

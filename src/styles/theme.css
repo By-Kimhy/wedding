@@ -1,0 +1,156 @@
+/*
+ * theme.css — the single source of truth for the invitation's look.
+ *
+ * Change the palette, the type scale or the invitation width here and the
+ * whole invitation follows. Nothing else in the project hard-codes a colour.
+ */
+
+:root {
+  /* ---- Palette -------------------------------------------------------- */
+  --color-background: #fbfdff; /* paper */
+  --color-surface: #e9f4fc; /* pale blue wash */
+  --color-primary: #2c5ea8; /* deep blue */
+  --color-secondary: #8ba0b8; /* faint ink */
+  --color-accent: #a3c4e7; /* mid blue, for rules and ornament */
+  --color-text: #16273f; /* ink */
+  --color-muted: #4a6280; /* soft ink */
+  --color-white: #ffffff;
+  --color-border: rgba(44, 94, 168, 0.16);
+
+  /* Derived tones. Kept here so the palette stays editable in one place. */
+  --color-hairline: rgba(44, 94, 168, 0.1);
+  --color-aqua: #ccf2f4;
+  --color-accent-soft: rgba(204, 242, 244, 0.5);
+  /* The ground the invitation card rests on, seen on tablet and desktop. */
+  --color-backdrop: #c2dcf0;
+  --color-ground-mid: #dbedf9;
+  --color-ground-end: #b3e2e8;
+
+  /* ---- Typography ----------------------------------------------------- */
+  /*
+   * Each language has its own pair of faces: one for titles, one for running
+   * text. Every stack ends with the other two scripts, because a face only
+   * ever supplies the glyphs it actually has — so a Khmer word inside an
+   * English heading still lands on a Khmer face rather than a random system
+   * fallback.
+   */
+  /*
+   * Every var() here carries its own fallback: an undefined var() inside a
+   * font-family list invalidates the *whole* declaration, which would drop
+   * every language back to a system font.
+   */
+  --face-en-title: "HughIsLife";
+  --face-en-body: var(--font-inter, "Inter"), system-ui;
+
+  --face-kh-title: var(--font-hanuman, "Hanuman");
+  --face-kh-body: "Kantumruy Pro", var(--font-kantumruy, "Kantumruy Pro");
+
+  /* Self-hosted subsets — see scripts/generate-chinese-fonts.mjs. */
+  --face-zh-title: "Ma Shan Zheng";
+  --face-zh-body: "Noto Serif SC", "Songti SC", "PingFang SC";
+
+  /* Titles: the language's display face, then the other scripts. */
+  --font-en-title: var(--face-en-title), var(--face-en-body),
+    var(--face-kh-title), var(--face-zh-title), serif;
+  --font-kh-title: var(--face-kh-title), var(--face-kh-body),
+    var(--face-zh-title), serif;
+  --font-zh-title: var(--face-zh-title), var(--face-zh-body),
+    var(--face-kh-title), serif;
+
+  /* Running text. */
+  --font-en: var(--face-en-body), var(--face-kh-body), var(--face-zh-body),
+    sans-serif;
+  --font-kh: var(--face-kh-body), var(--face-en-body), var(--face-zh-body),
+    sans-serif;
+  --font-zh: var(--face-zh-body), var(--face-en-body), var(--face-kh-body),
+    serif;
+
+  /*
+   * What `.t-display` / `.t-title` / `.t-heading` read. The language classes
+   * in globals.css re-point it, and it inherits, so a heading picks up the
+   * right face whether the language class sits on it or on an ancestor.
+   */
+  --font-title: var(--font-en-title);
+  --font-display: var(--font-title);
+
+  /*
+   * Anything that must stay legible whatever the display faces are doing:
+   * letterspaced labels, times, form fields, the countdown.
+   */
+  --font-ui: var(--font-inter, "Inter"), system-ui, var(--face-kh-body),
+    var(--face-zh-body), sans-serif;
+
+  /*
+   * Sizes are expressed in `cqw` against the invitation column, so the
+   * invitation reads identically at 320px on a phone and at 480px inside a
+   * desktop window. The clamps keep both ends comfortable.
+   */
+  --fs-display: clamp(2.5rem, 15cqw, 4.5rem);
+  --fs-title: clamp(1.6rem, 8.6cqw, 2.6rem);
+  --fs-heading: clamp(1.15rem, 5.6cqw, 1.7rem);
+  --fs-lead: clamp(0.98rem, 4.4cqw, 1.3rem);
+  --fs-body: clamp(0.875rem, 3.8cqw, 1.05rem);
+  --fs-caption: clamp(0.75rem, 3.2cqw, 0.9rem);
+  --fs-eyebrow: clamp(0.625rem, 2.9cqw, 0.8rem);
+
+  --tracking-eyebrow: 0.34em;
+  --tracking-display: 0.06em;
+
+  /* ---- Layout --------------------------------------------------------- */
+  --invitation-max: 480px;
+  --gutter: clamp(1.25rem, 6.5cqw, 2.25rem);
+  --section-gap: clamp(4.5rem, 20cqw, 7rem);
+
+  /* ---- Motion --------------------------------------------------------- */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---- Elevation ------------------------------------------------------ */
+  /*
+   * A white inner edge plus a soft drop: on a pale ground a shadow alone is
+   * not enough to separate the card, but a lit edge reads immediately.
+   */
+  --shadow-page: inset 1px 0 0 rgba(255, 255, 255, 0.75),
+    inset -1px 0 0 rgba(255, 255, 255, 0.75),
+    0 0 0 1px rgba(44, 94, 168, 0.07),
+    0 6px 22px -12px rgba(22, 39, 63, 0.2),
+    0 40px 100px -30px rgba(22, 39, 63, 0.42);
+  --shadow-float: 0 8px 28px -10px rgba(22, 39, 63, 0.4);
+}
+
+/*
+ * Fine paper grain, reused by the page ground and by the invitation column.
+ * Inlined as a data URI so it costs no extra request.
+ */
+:root {
+  --texture-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+
+/* -------------------------------------------------------------------------
+ * HughIsLife — the English title face.
+ *
+ * Converted from the supplied `Hugh is Life Personal Use .ttf` (154 KB) to
+ * woff2 (27 KB). The family name here is ours, not the file's internal one, so
+ * the stacks in this file refer to "HughIsLife".
+ *
+ * Two things about this free "Personal Use" cut, both handled by the
+ * unicode-range below:
+ *
+ * 1. Its ten digit glyphs are not digits at all — every one is the same
+ *    "PERSONAL USE · WWW.BILLYARGEL.COM" advertisement artwork. Rendering a
+ *    time or a countdown in it printed a row of billboards.
+ * 2. It carries no punctuation whatsoever — no comma, ampersand, colon,
+ *    apostrophe or slash.
+ *
+ * The range therefore hands the face everything except U+0030–0039, and the
+ * browser falls through per character to Inter — the English body face — for
+ * the digits and the missing punctuation.
+ * ---------------------------------------------------------------------- */
+@font-face {
+  font-family: "HughIsLife";
+  src: url("/fonts/HughIsLife.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-002F, U+003A-10FFFF;
+}
+
