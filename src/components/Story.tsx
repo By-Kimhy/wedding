@@ -15,17 +15,7 @@ function Chapter({ chapter, index }: { chapter: StoryChapter; index: number }) {
 
   return (
     <article className="relative">
-      <Reveal distance={22} duration={1.05}>
-        <div className={cn(fullBleed ? "" : "px-[var(--gutter)]")}>
-          <Photo
-            photo={chapter.photo}
-            ratio={fullBleed ? "4/5" : "1/1"}
-            sizes="(max-width: 520px) 100vw, 480px"
-          />
-        </div>
-      </Reveal>
-
-      <div className="relative mt-9 px-[var(--gutter)]">
+      <div className="relative mb-9 px-[var(--gutter)]">
         {/* A faint folio number, the way a printed book marks a chapter. */}
         <Reveal distance={0} duration={1.2} className="pointer-events-none">
           <span
@@ -55,6 +45,16 @@ function Chapter({ chapter, index }: { chapter: StoryChapter; index: number }) {
           </p>
         </Reveal>
       </div>
+      <Reveal distance={22} duration={1.05}>
+        <div className={cn(fullBleed ? "" : "px-[var(--gutter)]")}>
+          <Photo
+            photo={chapter.photo}
+            ratio={fullBleed ? "4/5" : "1/1"}
+            sizes="(max-width: 520px) 100vw, 480px"
+          />
+        </div>
+      </Reveal>
+      
     </article>
   );
 }

@@ -60,11 +60,6 @@ function Unit({ value, label }: { value: string; label: string }) {
   );
 }
 
-/**
- * The countdown. Rendered as four numerals on the paper — no dashboard tiles,
- * no boxes. The server renders placeholder dashes and the browser fills them
- * in, so the markup never disagrees with the client's clock.
- */
 export function Countdown() {
   const { t, fontClass } = useLanguage();
   /* `null` until the page is running in the browser, then ticks each second. */

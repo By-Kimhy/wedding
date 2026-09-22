@@ -94,7 +94,7 @@ export function InvitationProvider({ children }: { children: ReactNode }) {
       const startY = window.scrollY;
       const startedAt = performance.now();
       /* Slow enough to read as the page moves, not a skip to the footer. */
-      const pixelsPerMs = 0.16;
+      const pixelsPerMs = 0.05;
 
       const tick = (now: number) => {
         if (cancelled) return;

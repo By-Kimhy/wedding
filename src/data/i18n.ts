@@ -102,9 +102,9 @@ export const ui = {
   story: {
     eyebrow: { en: "Our story", zh: "我们的故事", kh: "រឿងរ៉ាវរបស់យើង" },
     title: {
-      en: "How we\ngot here",
-      zh: "我们\n一路走来",
-      kh: "របៀប\nដែលយើងមកដល់ទីនេះ",
+      en: "How we got here",
+      zh: "我们一路走来",
+      kh: "របៀបដែលយើងមកដល់ទីនេះ",
     },
   },
 

@@ -25,25 +25,14 @@ function Person({ role, displayName, fullName, note, photo, side }: PersonProps)
 
   return (
     <article className="relative">
-      <Reveal distance={20} duration={1}>
-        <div className={cn("w-[82%]", isLeft ? "mr-auto" : "ml-auto")}>
-          <Photo
-            photo={photo}
-            ratio="4/5"
-            sizes="(max-width: 520px) 82vw, 394px"
-            className="shadow-[0_18px_50px_-28px_rgba(22,39,63,0.55)]"
-          />
-        </div>
-      </Reveal>
 
-      <Reveal
+<Reveal
         delay={0.12}
         className={cn(
-          "relative mt-7 px-[var(--gutter)]",
+          "relative mb-7 px-[var(--gutter)]",
           isLeft ? "text-right" : "text-left",
         )}
       >
-        {/* A hairline that runs under the name, from the outer edge inwards. */}
         <span
           aria-hidden
           className={cn(
@@ -67,6 +56,18 @@ function Person({ role, displayName, fullName, note, photo, side }: PersonProps)
 
         <p className={cn("t-body mt-4 text-muted", fontClass)}>{t(note)}</p>
       </Reveal>
+
+      <Reveal distance={20} duration={1}>
+        <div className={cn("w-[82%]", isLeft ? "mr-auto" : "ml-auto")}>
+          <Photo
+            photo={photo}
+            ratio="4/5"
+            sizes="(max-width: 520px) 82vw, 394px"
+            className="shadow-[0_18px_50px_-28px_rgba(22,39,63,0.55)]"
+          />
+        </div>
+      </Reveal>
+
     </article>
   );
 }
@@ -94,9 +95,9 @@ export function Couple() {
           photo={bride.photo}
         />
 
-        <Reveal distance={0} duration={1.2}>
+        {/* <Reveal distance={0} duration={1.2}>
           <VerticalRule height="4.5rem" />
-        </Reveal>
+        </Reveal> */}
 
         <Person
           side="right"
